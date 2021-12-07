@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bhjx.accdoctor.order.dao.OrderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.bhjx.accdoctor.order.entity.OrderEntity" id="orderMap">
+        <result property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="orderSn" column="order_sn"/>
+        <result property="createTime" column="create_time"/>
+        <result property="userUsername" column="user_username"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="payAmount" column="pay_amount"/>
+        <result property="payType" column="pay_type"/>
+        <result property="sourceType" column="source_type"/>
+        <result property="status" column="status"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPhone" column="user_phone"/>
+        <result property="userProvince" column="user_province"/>
+        <result property="userCity" column="user_city"/>
+        <result property="userRegion" column="user_region"/>
+        <result property="userDetailAddress" column="user_detail_address"/>
+        <result property="note" column="note"/>
+        <result property="deleteStatus" column="delete_status"/>
+        <result property="paymentTime" column="payment_time"/>
+        <result property="deliveryTime" column="delivery_time"/>
+        <result property="finishTime" column="finish_time"/>
+        <result property="commentTime" column="comment_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+
+</mapper>

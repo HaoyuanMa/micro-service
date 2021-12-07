@@ -8,7 +8,7 @@
 
 package com.bhjx.accdoctor.common.xss;
 
-import io.renren.common.exception.RRException;
+import com.bhjx.common.utils.RRException;
 import org.apache.commons.lang.StringUtils;
 
 /**
