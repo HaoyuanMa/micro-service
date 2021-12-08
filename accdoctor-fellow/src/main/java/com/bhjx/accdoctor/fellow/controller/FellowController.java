@@ -5,6 +5,8 @@ import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,11 +27,22 @@ import com.bhjx.common.utils.R;
  * @email mhy@bit.edu.cn
  * @date 2021-12-07 20:34:04
  */
+@RefreshScope
 @RestController
 @RequestMapping("fellow/fellow")
 public class FellowController {
     @Autowired
     private FellowService fellowService;
+
+    @Value("${fellow.user.name}")
+    private String userName;
+    @Value("${fellow.user.age}")
+    private String userAge;
+
+    @RequestMapping("/test")
+    public R test(){
+        return R.ok().put("name",userName).put("age",userAge);
+    }
 
     /**
      * 列表

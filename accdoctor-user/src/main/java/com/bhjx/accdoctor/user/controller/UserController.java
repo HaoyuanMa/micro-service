@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 
+import com.bhjx.accdoctor.user.feign.OrderFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,18 @@ import com.bhjx.common.utils.R;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    OrderFeignService orderFeignService;
+
+    @RequestMapping("/orders")
+    public R test(){
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername("mhy");
+        R orders = orderFeignService.UserOrders();
+
+        return R.ok().put("user",userEntity).put("order",orders.get("orders"));
+    }
 
     /**
      * 列表

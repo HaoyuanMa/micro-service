@@ -4,6 +4,12 @@ spring:
     password: root
     url: jdbc:mysql://10.20.19.38:3306/accdoctor_fms
     driver-class-name: com.mysql.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: accdoctor-fellow
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
