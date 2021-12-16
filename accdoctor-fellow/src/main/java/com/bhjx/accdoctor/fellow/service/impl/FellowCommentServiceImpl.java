@@ -22,6 +22,15 @@ public class FellowCommentServiceImpl extends ServiceImpl<FellowCommentDao, Fell
     public PageUtils queryPage(Map<String, Object> params) {
         QueryWrapper<FellowCommentEntity> queryWrapper = new QueryWrapper<FellowCommentEntity>();
         int fellowId = Integer.parseInt((String)params.get("fellow_id"));
+        int type = Integer.parseInt((String)params.get("type"));
+        queryWrapper.eq("fellow_id",fellowId);
+        if(type == 1){
+            queryWrapper.eq("comment_type",5).or().eq("comment_type",4);
+        } else if(type == 2){
+            queryWrapper.eq("comment_type",3);
+        } else if(type == 3){
+            queryWrapper.eq("comment_type",1).or().eq("comment_type",2);
+        }
         IPage<FellowCommentEntity> page = this.page(
                 new Query<FellowCommentEntity>().getPage(params),
                 queryWrapper
