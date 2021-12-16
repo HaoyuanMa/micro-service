@@ -25,11 +25,17 @@
     <el-form-item label="性别" prop="gender">
       <el-input v-model="dataForm.gender" placeholder="性别"></el-input>
     </el-form-item>
-    <el-form-item label="生日" prop="birth">
-      <el-input v-model="dataForm.birth" placeholder="生日"></el-input>
+    <el-form-item label="省" prop="province">
+      <el-input v-model="dataForm.province" placeholder="省"></el-input>
     </el-form-item>
     <el-form-item label="所在城市" prop="city">
       <el-input v-model="dataForm.city" placeholder="所在城市"></el-input>
+    </el-form-item>
+    <el-form-item label="区" prop="region">
+      <el-input v-model="dataForm.region" placeholder="区"></el-input>
+    </el-form-item>
+    <el-form-item label="详细地址" prop="detailAddress">
+      <el-input v-model="dataForm.detailAddress" placeholder="详细地址"></el-input>
     </el-form-item>
     <el-form-item label="职业" prop="job">
       <el-input v-model="dataForm.job" placeholder="职业"></el-input>
@@ -45,6 +51,12 @@
     </el-form-item>
     <el-form-item label="注册时间" prop="createTime">
       <el-input v-model="dataForm.createTime" placeholder="注册时间"></el-input>
+    </el-form-item>
+    <el-form-item label="" prop="price">
+      <el-input v-model="dataForm.price" placeholder=""></el-input>
+    </el-form-item>
+    <el-form-item label="年龄" prop="age">
+      <el-input v-model="dataForm.age" placeholder="年龄"></el-input>
     </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -68,13 +80,17 @@
           email: '',
           header: '',
           gender: '',
-          birth: '',
+          province: '',
           city: '',
+          region: '',
+          detailAddress: '',
           job: '',
           sign: '',
           status: '',
           fansCount: '',
-          createTime: ''
+          createTime: '',
+          price: '',
+          age: ''
         },
         dataRule: {
           username: [
@@ -98,11 +114,17 @@
           gender: [
             { required: true, message: '性别不能为空', trigger: 'blur' }
           ],
-          birth: [
-            { required: true, message: '生日不能为空', trigger: 'blur' }
+          province: [
+            { required: true, message: '省不能为空', trigger: 'blur' }
           ],
           city: [
             { required: true, message: '所在城市不能为空', trigger: 'blur' }
+          ],
+          region: [
+            { required: true, message: '区不能为空', trigger: 'blur' }
+          ],
+          detailAddress: [
+            { required: true, message: '详细地址不能为空', trigger: 'blur' }
           ],
           job: [
             { required: true, message: '职业不能为空', trigger: 'blur' }
@@ -118,6 +140,12 @@
           ],
           createTime: [
             { required: true, message: '注册时间不能为空', trigger: 'blur' }
+          ],
+          price: [
+            { required: true, message: '不能为空', trigger: 'blur' }
+          ],
+          age: [
+            { required: true, message: '年龄不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -142,13 +170,17 @@
                 this.dataForm.email = data.fellow.email
                 this.dataForm.header = data.fellow.header
                 this.dataForm.gender = data.fellow.gender
-                this.dataForm.birth = data.fellow.birth
+                this.dataForm.province = data.fellow.province
                 this.dataForm.city = data.fellow.city
+                this.dataForm.region = data.fellow.region
+                this.dataForm.detailAddress = data.fellow.detailAddress
                 this.dataForm.job = data.fellow.job
                 this.dataForm.sign = data.fellow.sign
                 this.dataForm.status = data.fellow.status
                 this.dataForm.fansCount = data.fellow.fansCount
                 this.dataForm.createTime = data.fellow.createTime
+                this.dataForm.price = data.fellow.price
+                this.dataForm.age = data.fellow.age
               }
             })
           }
@@ -170,13 +202,17 @@
                 'email': this.dataForm.email,
                 'header': this.dataForm.header,
                 'gender': this.dataForm.gender,
-                'birth': this.dataForm.birth,
+                'province': this.dataForm.province,
                 'city': this.dataForm.city,
+                'region': this.dataForm.region,
+                'detailAddress': this.dataForm.detailAddress,
                 'job': this.dataForm.job,
                 'sign': this.dataForm.sign,
                 'status': this.dataForm.status,
                 'fansCount': this.dataForm.fansCount,
-                'createTime': this.dataForm.createTime
+                'createTime': this.dataForm.createTime,
+                'price': this.dataForm.price,
+                'age': this.dataForm.age
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

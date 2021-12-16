@@ -12,7 +12,7 @@ import lombok.Data;
  * 
  * @author mhy
  * @email mhy@bit.edu.cn
- * @date 2021-12-07 20:34:04
+ * @date 2021-12-16 11:48:56
  */
 @Data
 @TableName("fms_fellow")
@@ -53,13 +53,21 @@ public class FellowEntity implements Serializable {
 	 */
 	private Integer gender;
 	/**
-	 * 生日
+	 * 省
 	 */
-	private Date birth;
+	private String province;
 	/**
 	 * 所在城市
 	 */
 	private String city;
+	/**
+	 * 区
+	 */
+	private String region;
+	/**
+	 * 详细地址
+	 */
+	private String detailAddress;
 	/**
 	 * 职业
 	 */
@@ -80,5 +88,13 @@ public class FellowEntity implements Serializable {
 	 * 注册时间
 	 */
 	private Date createTime;
+	/**
+	 * 
+	 */
+	private Double price;
+	/**
+	 * 年龄
+	 */
+	private Integer age;
 
 }

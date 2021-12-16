@@ -71,16 +71,28 @@
         label="性别">
       </el-table-column>
       <el-table-column
-        prop="birth"
+        prop="province"
         header-align="center"
         align="center"
-        label="生日">
+        label="省">
       </el-table-column>
       <el-table-column
         prop="city"
         header-align="center"
         align="center"
         label="所在城市">
+      </el-table-column>
+      <el-table-column
+        prop="region"
+        header-align="center"
+        align="center"
+        label="区">
+      </el-table-column>
+      <el-table-column
+        prop="detailAddress"
+        header-align="center"
+        align="center"
+        label="详细地址">
       </el-table-column>
       <el-table-column
         prop="job"
@@ -111,6 +123,18 @@
         header-align="center"
         align="center"
         label="注册时间">
+      </el-table-column>
+      <el-table-column
+        prop="price"
+        header-align="center"
+        align="center"
+        label="">
+      </el-table-column>
+      <el-table-column
+        prop="age"
+        header-align="center"
+        align="center"
+        label="年龄">
       </el-table-column>
       <el-table-column
         fixed="right"
