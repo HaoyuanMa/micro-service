@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.bhjx.common.utils.PageUtils;
 import com.bhjx.accdoctor.fellow.entity.FellowCommentEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,6 @@ import java.util.Map;
 public interface FellowCommentService extends IService<FellowCommentEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    List<FellowCommentEntity> queryList(Map<String, Object> params);
 }
 

@@ -1,9 +1,11 @@
 package com.bhjx.accdoctor.fellow.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,31 @@ public class FellowCommentController {
     @Autowired
     private FellowCommentService fellowCommentService;
 
+    @RequestMapping("/config")
+    public R config(@RequestParam Map<String, Object> params){
+        List<FellowCommentEntity> comments = fellowCommentService.queryList(params);
+        int sum = comments.size();
+        int good = 0;
+        int in = 0;
+        int poor = 0;
+        for (FellowCommentEntity comment : comments) {
+            if (comment.getCommentType() >= 4){
+                good++;
+            } else if(comment.getCommentType() == 3){
+                in++;
+            } else {
+                poor++;
+            }
+        }
+        int rate = (int) ((double)good / (double)sum * 100) ;
+        int star = (int)(good * 4.5 + in * 3 + poor * 1.5)/sum;
+        return R.ok().put("sum_count",sum)
+                .put("good_count",good)
+                .put("in_count",in)
+                .put("poor_count",poor)
+                .put("reply_chance",rate)
+                .put("reply_star",star);
+    }
     /**
      * 列表
      */
