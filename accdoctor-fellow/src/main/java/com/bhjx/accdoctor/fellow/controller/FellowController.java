@@ -1,9 +1,13 @@
 package com.bhjx.accdoctor.fellow.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
+import com.bhjx.accdoctor.fellow.entity.FellowCommentEntity;
+import com.bhjx.accdoctor.fellow.service.FellowCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +34,8 @@ import com.bhjx.common.utils.R;
 public class FellowController {
     @Autowired
     private FellowService fellowService;
+    @Autowired
+    private FellowCommentService fellowCommentService;
 
     /**
      * 列表
@@ -51,7 +57,23 @@ public class FellowController {
     public R info(@PathVariable("id") Long id){
 		FellowEntity fellow = fellowService.getById(id);
 
-        return R.ok().put("fellow", fellow);
+        List<FellowCommentEntity> comments = fellowCommentService.queryList(null,id);
+        int sum = comments.size();
+        int good = 0;
+        int in = 0;
+        int poor = 0;
+        for (FellowCommentEntity comment : comments) {
+            if (comment.getCommentType() >= 4){
+                good++;
+            } else if(comment.getCommentType() == 3){
+                in++;
+            } else {
+                poor++;
+            }
+        }
+        if (sum == 0) sum = 1;
+        int rate = (int) ((double)good / (double)sum * 100) ;
+        return R.ok().put("fellow", fellow).put("replyCount", sum).put("replyChance", rate).put("reply",comments);
     }
 
     /**

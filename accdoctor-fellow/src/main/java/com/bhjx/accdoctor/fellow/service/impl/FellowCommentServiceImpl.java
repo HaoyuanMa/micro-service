@@ -2,6 +2,7 @@ package com.bhjx.accdoctor.fellow.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -40,9 +41,15 @@ public class FellowCommentServiceImpl extends ServiceImpl<FellowCommentDao, Fell
     }
 
     @Override
-    public List<FellowCommentEntity> queryList(Map<String, Object> params) {
+    public List<FellowCommentEntity> queryList(Map<String, Object> params, Serializable id) {
         QueryWrapper<FellowCommentEntity> queryWrapper = new QueryWrapper<FellowCommentEntity>();
-        int fellowId = Integer.parseInt((String)params.get("fellow_id"));
+        Long fellowId;
+        if (params == null){
+            fellowId = (Long) id;
+        } else {
+            fellowId = Long.parseLong((String)params.get("fellow_id"));
+        }
+
         queryWrapper.eq("fellow_id",fellowId);
         return list(queryWrapper);
     }

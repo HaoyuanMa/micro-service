@@ -24,10 +24,10 @@ public class FellowServiceImpl extends ServiceImpl<FellowDao, FellowEntity> impl
         String keyword = (String) params.get("keyword");
         String orderField = SQLFilter.sqlInject((String)params.get(Constant.ORDER_FIELD));
         String order = (String)params.get(Constant.ORDER);
-        if (!keyword.isEmpty()){
+        if (keyword != null && !keyword.isEmpty()){
             queryWrapper.like("username",keyword);
         }
-        if (!order.isEmpty() && !orderField.isEmpty()){
+        if (orderField != null && order != null && !order.isEmpty() && !orderField.isEmpty()){
             if(Constant.ASC.equalsIgnoreCase(order)){
                 queryWrapper.orderByAsc(orderField);
             } else {

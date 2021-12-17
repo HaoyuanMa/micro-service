@@ -35,7 +35,7 @@ public class FellowCommentController {
 
     @RequestMapping("/config")
     public R config(@RequestParam Map<String, Object> params){
-        List<FellowCommentEntity> comments = fellowCommentService.queryList(params);
+        List<FellowCommentEntity> comments = fellowCommentService.queryList(params,0);
         int sum = comments.size();
         int good = 0;
         int in = 0;
@@ -49,6 +49,7 @@ public class FellowCommentController {
                 poor++;
             }
         }
+        if (sum == 0) sum = 1;
         int rate = (int) ((double)good / (double)sum * 100) ;
         int star = (int)(good * 4.5 + in * 3 + poor * 1.5)/sum;
         return R.ok().put("sum_count",sum)
