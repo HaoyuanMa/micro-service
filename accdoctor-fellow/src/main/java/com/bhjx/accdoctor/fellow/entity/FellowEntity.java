@@ -71,7 +71,7 @@ public class FellowEntity implements Serializable {
 	/**
 	 * 职业
 	 */
-	private String job;
+	private String description;
 	/**
 	 * 个性签名
 	 */
