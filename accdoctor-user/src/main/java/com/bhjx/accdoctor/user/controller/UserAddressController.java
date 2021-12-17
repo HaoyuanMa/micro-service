@@ -1,15 +1,14 @@
 package com.bhjx.accdoctor.user.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
+import com.bhjx.accdoctor.user.entity.UserAddressAddEntity;
+import com.bhjx.common.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bhjx.accdoctor.user.entity.UserAddressEntity;
 import com.bhjx.accdoctor.user.service.UserAddressService;
@@ -31,15 +30,25 @@ public class UserAddressController {
     @Autowired
     private UserAddressService userAddressService;
 
+    @RequestMapping("/default")
+    //@RequiresPermissions("user:useraddress:list")
+    public R getDefault(@RequestHeader("Authorization") String token){
+        long id = JwtUtils.getUserIdFromToken(token);
+        UserAddressEntity defaultAddress = userAddressService.queryDefault(id);
+
+        return R.ok().put("data", defaultAddress);
+    }
+
     /**
      * 列表
      */
     @RequestMapping("/list")
     //@RequiresPermissions("user:useraddress:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = userAddressService.queryPage(params);
+    public R list(@RequestHeader("Authorization") String token){
+        long id = JwtUtils.getUserIdFromToken(token);
+        List<UserAddressEntity> userAddress = userAddressService.queryList(id);
 
-        return R.ok().put("page", page);
+        return R.ok().put("data", userAddress);
     }
 
 
@@ -57,11 +66,25 @@ public class UserAddressController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/add")
     //@RequiresPermissions("user:useraddress:save")
-    public R save(@RequestBody UserAddressEntity userAddress){
-		userAddressService.save(userAddress);
-
+    public R save(@RequestBody UserAddressAddEntity userAddress,@RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userAddress.defaultStatus){
+            UserAddressEntity defaultAddress = userAddressService.queryDefault(userId);
+            defaultAddress.setDefaultStatus(0);
+            userAddressService.updateById(defaultAddress);
+        }
+        UserAddressEntity newAddress = new UserAddressEntity();
+        newAddress.setUserId(userId);
+        newAddress.setName(userAddress.name);
+        newAddress.setPhone(userAddress.phone);
+        newAddress.setProvince(userAddress.province);
+        newAddress.setCity(userAddress.city);
+        newAddress.setRegion(userAddress.region);
+        newAddress.setDetailAddress(userAddress.detailAddress);
+        newAddress.setDefaultStatus(userAddress.defaultStatus ? 1 : 0 );
+        userAddressService.save(newAddress);
         return R.ok();
     }
 

@@ -4,19 +4,17 @@ import java.util.Arrays;
 import java.util.Map;
 
 
+import com.bhjx.accdoctor.user.entity.LoginEntity;
 import com.bhjx.accdoctor.user.feign.OrderFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import org.springframework.web.bind.annotation.*;
 
 import com.bhjx.accdoctor.user.entity.UserEntity;
 import com.bhjx.accdoctor.user.service.UserService;
 import com.bhjx.common.utils.PageUtils;
 import com.bhjx.common.utils.R;
-
+import org.springframework.web.servlet.function.ServerRequest;
 
 
 /**
@@ -34,6 +32,21 @@ public class UserController {
 
     @Autowired
     OrderFeignService orderFeignService;
+
+    @RequestMapping("/login")
+    public R login(@RequestBody LoginEntity loginEntity){
+        String username = loginEntity.username;
+        String password = loginEntity.password;
+        String vcode = loginEntity.vcode;
+
+        //todo: validate
+
+
+
+
+        return R.ok().put("token","1");
+    }
+
 
     @RequestMapping("/orders")
     public R test(){
@@ -59,10 +72,12 @@ public class UserController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/info")
     //@RequiresPermissions("user:user:info")
-    public R info(@PathVariable("id") Long id){
-		UserEntity user = userService.getById(id);
+    public R info(@RequestHeader("Authorization") String token) {
+
+		UserEntity user = userService.getById(Integer.parseInt(token));
+        user.setPassword("****");
 
         return R.ok().put("user", user);
     }

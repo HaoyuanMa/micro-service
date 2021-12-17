@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.bhjx.common.utils.PageUtils;
 import com.bhjx.accdoctor.user.entity.UserAddressEntity;
 
+import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,9 @@ import java.util.Map;
 public interface UserAddressService extends IService<UserAddressEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<UserAddressEntity> queryList(Serializable id);
+
+    UserAddressEntity queryDefault(Serializable id);
 }
 
