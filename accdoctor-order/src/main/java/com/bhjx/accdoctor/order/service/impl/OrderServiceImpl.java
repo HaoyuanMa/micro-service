@@ -1,6 +1,9 @@
 package com.bhjx.accdoctor.order.service.impl;
 
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -32,6 +35,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         queryWrapper.eq("order_sn",orderSn);
         if (queryWrapper.isEmptyOfWhere()) return null;
         return getOne(queryWrapper);
+    }
+
+    @Override
+    public List<OrderEntity> queryByStatus(int status) {
+        QueryWrapper<OrderEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status",status);
+        if (queryWrapper.isEmptyOfWhere()) return Collections.emptyList();
+        return list(queryWrapper);
     }
 
 }

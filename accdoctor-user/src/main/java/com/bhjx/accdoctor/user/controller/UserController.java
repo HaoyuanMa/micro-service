@@ -50,15 +50,6 @@ public class UserController {
     }
 
 
-    @RequestMapping("/orders")
-    public R test(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("mhy");
-        R orders = orderFeignService.UserOrders();
-
-        return R.ok().put("user",userEntity).put("order",orders.get("orders"));
-    }
-
     /**
      * 列表
      */

@@ -31,6 +31,20 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @RequestMapping("/stats")
+    public R stats(@RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
+
+        int unpaid = orderService.queryByStatus(0).size();
+        int paid = orderService.queryByStatus(1).size();
+        int waitToComment = orderService.queryByStatus(2).size();
+        int finished = orderService.queryByStatus(3).size();
+
+        return R.ok().put("unpaid",unpaid).put("paid",paid).put("waitToComment",waitToComment).put("finished",finished);
+
+    }
+
     /**
      * 列表
      */

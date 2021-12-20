@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.bhjx.common.utils.PageUtils;
 import com.bhjx.accdoctor.order.entity.OrderEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,5 +19,7 @@ public interface OrderService extends IService<OrderEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     OrderEntity queryByOrderSn(String orderSn);
+
+    List<OrderEntity> queryByStatus(int status);
 }
 
