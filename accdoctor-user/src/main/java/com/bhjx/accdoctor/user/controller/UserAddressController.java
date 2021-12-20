@@ -34,8 +34,9 @@ public class UserAddressController {
     //@RequiresPermissions("user:useraddress:list")
     public R getDefault(@RequestHeader("Authorization") String token){
         long id = JwtUtils.getUserIdFromToken(token);
+        if (id <= 0) return R.error(401,"鉴权失败");
         UserAddressEntity defaultAddress = userAddressService.queryDefault(id);
-
+        if (defaultAddress == null) return R.error(500,"not found");
         return R.ok().put("data", defaultAddress);
     }
 
@@ -46,9 +47,39 @@ public class UserAddressController {
     //@RequiresPermissions("user:useraddress:list")
     public R list(@RequestHeader("Authorization") String token){
         long id = JwtUtils.getUserIdFromToken(token);
+        if (id <= 0) return R.error(401,"鉴权失败");
         List<UserAddressEntity> userAddress = userAddressService.queryList(id);
 
         return R.ok().put("data", userAddress);
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/add")
+    //@RequiresPermissions("user:useraddress:save")
+    public R save(@RequestBody UserAddressAddEntity userAddress,@RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
+        UserAddressEntity defaultAddress = userAddressService.queryDefault(userId);
+        if (defaultAddress == null){
+            userAddress.setDefaultStatus(1);
+        } else if (userAddress.getDefaultStatus() != 0) {
+            defaultAddress.setDefaultStatus(0);
+            userAddressService.updateById(defaultAddress);
+        }
+
+        UserAddressEntity newAddress = new UserAddressEntity();
+        newAddress.setUserId(userId);
+        newAddress.setName(userAddress.getName());
+        newAddress.setPhone(userAddress.getPhone());
+        newAddress.setProvince(userAddress.getProvince());
+        newAddress.setCity(userAddress.getCity());
+        newAddress.setRegion(userAddress.getRegion());
+        newAddress.setDetailAddress(userAddress.getDetailAddress());
+        newAddress.setDefaultStatus(userAddress.getDefaultStatus() != 0 ? 1 : 0 );
+        userAddressService.save(newAddress);
+        return R.ok();
     }
 
 
@@ -63,30 +94,6 @@ public class UserAddressController {
         return R.ok().put("userAddress", userAddress);
     }
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/add")
-    //@RequiresPermissions("user:useraddress:save")
-    public R save(@RequestBody UserAddressAddEntity userAddress,@RequestHeader("Authorization") String token){
-        long userId = JwtUtils.getUserIdFromToken(token);
-        if (userAddress.defaultStatus){
-            UserAddressEntity defaultAddress = userAddressService.queryDefault(userId);
-            defaultAddress.setDefaultStatus(0);
-            userAddressService.updateById(defaultAddress);
-        }
-        UserAddressEntity newAddress = new UserAddressEntity();
-        newAddress.setUserId(userId);
-        newAddress.setName(userAddress.name);
-        newAddress.setPhone(userAddress.phone);
-        newAddress.setProvince(userAddress.province);
-        newAddress.setCity(userAddress.city);
-        newAddress.setRegion(userAddress.region);
-        newAddress.setDetailAddress(userAddress.detailAddress);
-        newAddress.setDefaultStatus(userAddress.defaultStatus ? 1 : 0 );
-        userAddressService.save(newAddress);
-        return R.ok();
-    }
 
     /**
      * 修改

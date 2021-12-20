@@ -29,10 +29,16 @@
         label="id">
       </el-table-column>
       <el-table-column
-        prop="memberId"
+        prop="userId"
         header-align="center"
         align="center"
-        label="member_id">
+        label="用户id">
+      </el-table-column>
+      <el-table-column
+        prop="fellowId"
+        header-align="center"
+        align="center"
+        label="陪诊员id">
       </el-table-column>
       <el-table-column
         prop="orderSn"
@@ -41,13 +47,7 @@
         label="订单号">
       </el-table-column>
       <el-table-column
-        prop="createTime"
-        header-align="center"
-        align="center"
-        label="create_time">
-      </el-table-column>
-      <el-table-column
-        prop="userUsername"
+        prop="username"
         header-align="center"
         align="center"
         label="用户名">
@@ -57,12 +57,6 @@
         header-align="center"
         align="center"
         label="订单总额">
-      </el-table-column>
-      <el-table-column
-        prop="payAmount"
-        header-align="center"
-        align="center"
-        label="应付总额">
       </el-table-column>
       <el-table-column
         prop="payType"
@@ -125,22 +119,16 @@
         label="订单备注">
       </el-table-column>
       <el-table-column
-        prop="deleteStatus"
+        prop="createTime"
         header-align="center"
         align="center"
-        label="删除状态【0->未删除；1->已删除】">
+        label="create_time">
       </el-table-column>
       <el-table-column
         prop="paymentTime"
         header-align="center"
         align="center"
         label="支付时间">
-      </el-table-column>
-      <el-table-column
-        prop="deliveryTime"
-        header-align="center"
-        align="center"
-        label="接单时间">
       </el-table-column>
       <el-table-column
         prop="finishTime"

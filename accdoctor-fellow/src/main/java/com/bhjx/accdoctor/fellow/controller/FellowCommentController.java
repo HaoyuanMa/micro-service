@@ -1,17 +1,17 @@
 package com.bhjx.accdoctor.fellow.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
+import com.bhjx.accdoctor.fellow.entity.FellowCommentAddEntity;
+import com.bhjx.accdoctor.fellow.feign.OrderFeignService;
+import com.bhjx.common.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bhjx.accdoctor.fellow.entity.FellowCommentEntity;
 import com.bhjx.accdoctor.fellow.service.FellowCommentService;
@@ -32,6 +32,8 @@ import com.bhjx.common.utils.R;
 public class FellowCommentController {
     @Autowired
     private FellowCommentService fellowCommentService;
+    @Autowired
+    private OrderFeignService orderFeignService;
 
     @RequestMapping("/config")
     public R config(@RequestParam Map<String, Object> params){
@@ -85,12 +87,34 @@ public class FellowCommentController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/add")
     //@RequiresPermissions("fellow:fellowcomment:save")
-    public R save(@RequestBody FellowCommentEntity fellowComment){
-		fellowCommentService.save(fellowComment);
+    public R save(@RequestBody FellowCommentAddEntity fellowComment, @RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
 
-        return R.ok();
+
+
+        FellowCommentEntity newComment = new FellowCommentEntity();
+
+        newComment.setUserId(userId);
+        newComment.setCreateTime(new Date());
+        newComment.setFellowId(fellowComment.getFellowId());
+        newComment.setFellowName(fellowComment.getFellowName());
+        newComment.setUserNickName(fellowComment.getUserNickName());
+        newComment.setContent(fellowComment.getContent());
+        newComment.setUserIcon(fellowComment.getUserIcon());
+        newComment.setCommentType(fellowComment.getCommentType());
+
+        if(fellowCommentService.save(newComment)){
+            //todo: order status
+            Long orderId = fellowComment.getOrderId();
+            orderFeignService.finishOrder(orderId,token);
+
+            return R.ok();
+        }
+
+        return R.error(500,"faild");
     }
 
     /**

@@ -4,23 +4,20 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="member_id" prop="memberId">
-      <el-input v-model="dataForm.memberId" placeholder="member_id"></el-input>
+    <el-form-item label="用户id" prop="userId">
+      <el-input v-model="dataForm.userId" placeholder="用户id"></el-input>
+    </el-form-item>
+    <el-form-item label="陪诊员id" prop="fellowId">
+      <el-input v-model="dataForm.fellowId" placeholder="陪诊员id"></el-input>
     </el-form-item>
     <el-form-item label="订单号" prop="orderSn">
       <el-input v-model="dataForm.orderSn" placeholder="订单号"></el-input>
     </el-form-item>
-    <el-form-item label="create_time" prop="createTime">
-      <el-input v-model="dataForm.createTime" placeholder="create_time"></el-input>
-    </el-form-item>
-    <el-form-item label="用户名" prop="userUsername">
-      <el-input v-model="dataForm.userUsername" placeholder="用户名"></el-input>
+    <el-form-item label="用户名" prop="username">
+      <el-input v-model="dataForm.username" placeholder="用户名"></el-input>
     </el-form-item>
     <el-form-item label="订单总额" prop="totalAmount">
       <el-input v-model="dataForm.totalAmount" placeholder="订单总额"></el-input>
-    </el-form-item>
-    <el-form-item label="应付总额" prop="payAmount">
-      <el-input v-model="dataForm.payAmount" placeholder="应付总额"></el-input>
     </el-form-item>
     <el-form-item label="支付方式【1->支付宝；2->微信；3->银联； 4->货到付款；】" prop="payType">
       <el-input v-model="dataForm.payType" placeholder="支付方式【1->支付宝；2->微信；3->银联； 4->货到付款；】"></el-input>
@@ -52,14 +49,11 @@
     <el-form-item label="订单备注" prop="note">
       <el-input v-model="dataForm.note" placeholder="订单备注"></el-input>
     </el-form-item>
-    <el-form-item label="删除状态【0->未删除；1->已删除】" prop="deleteStatus">
-      <el-input v-model="dataForm.deleteStatus" placeholder="删除状态【0->未删除；1->已删除】"></el-input>
+    <el-form-item label="create_time" prop="createTime">
+      <el-input v-model="dataForm.createTime" placeholder="create_time"></el-input>
     </el-form-item>
     <el-form-item label="支付时间" prop="paymentTime">
       <el-input v-model="dataForm.paymentTime" placeholder="支付时间"></el-input>
-    </el-form-item>
-    <el-form-item label="接单时间" prop="deliveryTime">
-      <el-input v-model="dataForm.deliveryTime" placeholder="接单时间"></el-input>
     </el-form-item>
     <el-form-item label="结单时间" prop="finishTime">
       <el-input v-model="dataForm.finishTime" placeholder="结单时间"></el-input>
@@ -85,12 +79,11 @@
         visible: false,
         dataForm: {
           id: 0,
-          memberId: '',
+          userId: '',
+          fellowId: '',
           orderSn: '',
-          createTime: '',
-          userUsername: '',
+          username: '',
           totalAmount: '',
-          payAmount: '',
           payType: '',
           sourceType: '',
           status: '',
@@ -101,31 +94,27 @@
           userRegion: '',
           userDetailAddress: '',
           note: '',
-          deleteStatus: '',
+          createTime: '',
           paymentTime: '',
-          deliveryTime: '',
           finishTime: '',
           commentTime: '',
           modifyTime: ''
         },
         dataRule: {
-          memberId: [
-            { required: true, message: 'member_id不能为空', trigger: 'blur' }
+          userId: [
+            { required: true, message: '用户id不能为空', trigger: 'blur' }
+          ],
+          fellowId: [
+            { required: true, message: '陪诊员id不能为空', trigger: 'blur' }
           ],
           orderSn: [
             { required: true, message: '订单号不能为空', trigger: 'blur' }
           ],
-          createTime: [
-            { required: true, message: 'create_time不能为空', trigger: 'blur' }
-          ],
-          userUsername: [
+          username: [
             { required: true, message: '用户名不能为空', trigger: 'blur' }
           ],
           totalAmount: [
             { required: true, message: '订单总额不能为空', trigger: 'blur' }
-          ],
-          payAmount: [
-            { required: true, message: '应付总额不能为空', trigger: 'blur' }
           ],
           payType: [
             { required: true, message: '支付方式【1->支付宝；2->微信；3->银联； 4->货到付款；】不能为空', trigger: 'blur' }
@@ -157,14 +146,11 @@
           note: [
             { required: true, message: '订单备注不能为空', trigger: 'blur' }
           ],
-          deleteStatus: [
-            { required: true, message: '删除状态【0->未删除；1->已删除】不能为空', trigger: 'blur' }
+          createTime: [
+            { required: true, message: 'create_time不能为空', trigger: 'blur' }
           ],
           paymentTime: [
             { required: true, message: '支付时间不能为空', trigger: 'blur' }
-          ],
-          deliveryTime: [
-            { required: true, message: '接单时间不能为空', trigger: 'blur' }
           ],
           finishTime: [
             { required: true, message: '结单时间不能为空', trigger: 'blur' }
@@ -191,12 +177,11 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.memberId = data.order.memberId
+                this.dataForm.userId = data.order.userId
+                this.dataForm.fellowId = data.order.fellowId
                 this.dataForm.orderSn = data.order.orderSn
-                this.dataForm.createTime = data.order.createTime
-                this.dataForm.userUsername = data.order.userUsername
+                this.dataForm.username = data.order.username
                 this.dataForm.totalAmount = data.order.totalAmount
-                this.dataForm.payAmount = data.order.payAmount
                 this.dataForm.payType = data.order.payType
                 this.dataForm.sourceType = data.order.sourceType
                 this.dataForm.status = data.order.status
@@ -207,9 +192,8 @@
                 this.dataForm.userRegion = data.order.userRegion
                 this.dataForm.userDetailAddress = data.order.userDetailAddress
                 this.dataForm.note = data.order.note
-                this.dataForm.deleteStatus = data.order.deleteStatus
+                this.dataForm.createTime = data.order.createTime
                 this.dataForm.paymentTime = data.order.paymentTime
-                this.dataForm.deliveryTime = data.order.deliveryTime
                 this.dataForm.finishTime = data.order.finishTime
                 this.dataForm.commentTime = data.order.commentTime
                 this.dataForm.modifyTime = data.order.modifyTime
@@ -227,12 +211,11 @@
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
-                'memberId': this.dataForm.memberId,
+                'userId': this.dataForm.userId,
+                'fellowId': this.dataForm.fellowId,
                 'orderSn': this.dataForm.orderSn,
-                'createTime': this.dataForm.createTime,
-                'userUsername': this.dataForm.userUsername,
+                'username': this.dataForm.username,
                 'totalAmount': this.dataForm.totalAmount,
-                'payAmount': this.dataForm.payAmount,
                 'payType': this.dataForm.payType,
                 'sourceType': this.dataForm.sourceType,
                 'status': this.dataForm.status,
@@ -243,9 +226,8 @@
                 'userRegion': this.dataForm.userRegion,
                 'userDetailAddress': this.dataForm.userDetailAddress,
                 'note': this.dataForm.note,
-                'deleteStatus': this.dataForm.deleteStatus,
+                'createTime': this.dataForm.createTime,
                 'paymentTime': this.dataForm.paymentTime,
-                'deliveryTime': this.dataForm.deliveryTime,
                 'finishTime': this.dataForm.finishTime,
                 'commentTime': this.dataForm.commentTime,
                 'modifyTime': this.dataForm.modifyTime

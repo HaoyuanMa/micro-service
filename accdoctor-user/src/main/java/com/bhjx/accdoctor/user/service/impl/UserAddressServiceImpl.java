@@ -39,7 +39,8 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressDao, UserAddr
     @Override
     public UserAddressEntity queryDefault(Serializable id) {
         QueryWrapper<UserAddressEntity> queryWrapper = new QueryWrapper<UserAddressEntity>();
-        queryWrapper.eq("user_id",id).eq("default_status",true);
+        queryWrapper.eq("user_id",id).eq("default_status",1);
+        if (queryWrapper.isEmptyOfWhere()) return null;
         return getOne(queryWrapper);
     }
 

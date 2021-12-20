@@ -35,31 +35,14 @@ public class FellowCommentEntity implements Serializable {
 	/**
 	 * 用户昵称
 	 */
+
+	private Long userId;
+
 	private String userNickName;
-	/**
-	 * 用户ip
-	 */
-	private String userIp;
 	/**
 	 * 创建时间
 	 */
 	private Date createTime;
-	/**
-	 * 显示状态[0-不显示，1-显示]
-	 */
-	private Integer showStatus;
-	/**
-	 * 点赞数
-	 */
-	private Integer likesCount;
-	/**
-	 * 回复数
-	 */
-	private Integer replyCount;
-	/**
-	 * 评论图片/视频[json数据；[{type:文件类型,url:资源路径}]]
-	 */
-	private String resources;
 	/**
 	 * 内容
 	 */

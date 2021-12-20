@@ -13,7 +13,7 @@ import lombok.Data;
  * 
  * @author mhy
  * @email mhy@bit.edu.cn
- * @date 2021-12-07 20:25:58
+ * @date 2021-12-19 13:50:01
  */
 @Data
 @TableName("oms_order")
@@ -26,29 +26,25 @@ public class OrderEntity implements Serializable {
 	@TableId
 	private Long id;
 	/**
-	 * member_id
+	 * 用户id
 	 */
-	private Long memberId;
+	private Long userId;
+	/**
+	 * 陪诊员id
+	 */
+	private Long fellowId;
 	/**
 	 * 订单号
 	 */
 	private String orderSn;
 	/**
-	 * create_time
-	 */
-	private Date createTime;
-	/**
 	 * 用户名
 	 */
-	private String userUsername;
+	private String username;
 	/**
 	 * 订单总额
 	 */
 	private BigDecimal totalAmount;
-	/**
-	 * 应付总额
-	 */
-	private BigDecimal payAmount;
 	/**
 	 * 支付方式【1->支付宝；2->微信；3->银联； 4->货到付款；】
 	 */
@@ -64,7 +60,7 @@ public class OrderEntity implements Serializable {
 	/**
 	 * 用户姓名
 	 */
-	private String userName;
+	private String Name;
 	/**
 	 * 用户电话
 	 */
@@ -90,17 +86,13 @@ public class OrderEntity implements Serializable {
 	 */
 	private String note;
 	/**
-	 * 删除状态【0->未删除；1->已删除】
+	 * create_time
 	 */
-	private Integer deleteStatus;
+	private Date createTime;
 	/**
 	 * 支付时间
 	 */
 	private Date paymentTime;
-	/**
-	 * 接单时间
-	 */
-	private Date deliveryTime;
 	/**
 	 * 结单时间
 	 */
@@ -109,9 +101,5 @@ public class OrderEntity implements Serializable {
 	 * 评价时间
 	 */
 	private Date commentTime;
-	/**
-	 * 修改时间
-	 */
-	private Date modifyTime;
 
 }

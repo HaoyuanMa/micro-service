@@ -1,11 +1,14 @@
 package com.bhjx.accdoctor.user.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 
 import com.bhjx.accdoctor.user.entity.LoginEntity;
+import com.bhjx.accdoctor.user.entity.RegisterEntity;
 import com.bhjx.accdoctor.user.feign.OrderFeignService;
+import com.bhjx.common.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.web.bind.annotation.*;
@@ -35,16 +38,15 @@ public class UserController {
 
     @RequestMapping("/login")
     public R login(@RequestBody LoginEntity loginEntity){
-        String username = loginEntity.username;
+        String mobile = loginEntity.account;
         String password = loginEntity.password;
-        String vcode = loginEntity.vcode;
 
-        //todo: validate
-
-
-
-
-        return R.ok().put("token","1");
+        UserEntity user = userService.queryByMobile(mobile);
+        if(user != null && user.getPassword().equals(password)){
+            String token = JwtUtils.generateToken(user.getId(),user.getUsername());
+            return R.ok().put("token",token);
+        }
+        return R.error(401,"登录失败");
     }
 
 
@@ -75,8 +77,10 @@ public class UserController {
     @RequestMapping("/info")
     //@RequiresPermissions("user:user:info")
     public R info(@RequestHeader("Authorization") String token) {
-
-		UserEntity user = userService.getById(Integer.parseInt(token));
+        if (!JwtUtils.verify(token)){
+            return R.error(401,"鉴权失败");
+        }
+		UserEntity user = userService.getById(JwtUtils.getUserIdFromToken(token));
         user.setPassword("****");
 
         return R.ok().put("user", user);
@@ -85,12 +89,18 @@ public class UserController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/register")
     //@RequiresPermissions("user:user:save")
-    public R save(@RequestBody UserEntity user){
-		userService.save(user);
-
-        return R.ok();
+    public R save(@RequestBody RegisterEntity user){
+        if(userService.queryByMobile(user.getMobile()) == null){
+            UserEntity newUser = new UserEntity();
+            newUser.setUsername(user.getUsername());
+            newUser.setPassword(user.getPassword());
+            newUser.setMobile(user.getMobile());
+            newUser.setCreateTime(new Date());
+            if(userService.save(newUser)) return R.ok();
+        }
+        return R.error(500,"failed");
     }
 
     /**

@@ -11,10 +11,12 @@ import java.util.Map;
  *
  * @author mhy
  * @email mhy@bit.edu.cn
- * @date 2021-12-07 20:25:58
+ * @date 2021-12-19 13:50:01
  */
 public interface OrderService extends IService<OrderEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    OrderEntity queryByOrderSn(String orderSn);
 }
 

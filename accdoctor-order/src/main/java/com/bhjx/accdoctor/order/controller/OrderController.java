@@ -1,15 +1,15 @@
 package com.bhjx.accdoctor.order.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 
+import com.bhjx.accdoctor.order.entity.OrderAddEntity;
+import com.bhjx.common.utils.JwtUtils;
+import com.bhjx.common.utils.OrderSnGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bhjx.accdoctor.order.entity.OrderEntity;
 import com.bhjx.accdoctor.order.service.OrderService;
@@ -23,20 +23,13 @@ import com.bhjx.common.utils.R;
  *
  * @author mhy
  * @email mhy@bit.edu.cn
- * @date 2021-12-07 20:25:58
+ * @date 2021-12-19 13:50:01
  */
 @RestController
 @RequestMapping("order/order")
 public class OrderController {
     @Autowired
     private OrderService orderService;
-
-    @RequestMapping("user/list")
-    public R UserOrders(){
-        OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setMemberId(123L);
-        return R.ok().put("orders",Arrays.asList(orderEntity));
-    }
 
     /**
      * 列表
@@ -55,8 +48,12 @@ public class OrderController {
      */
     @RequestMapping("/info/{id}")
     //@RequiresPermissions("order:order:info")
-    public R info(@PathVariable("id") Long id){
-		OrderEntity order = orderService.getById(id);
+    public R info(@PathVariable("id") Long id,@RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
+
+        OrderEntity order = orderService.getById(id);
+        if (userId != order.getUserId()) return R.error(401,"鉴权失败");
 
         return R.ok().put("order", order);
     }
@@ -64,12 +61,44 @@ public class OrderController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @RequestMapping("/add")
     //@RequiresPermissions("order:order:save")
-    public R save(@RequestBody OrderEntity order){
-		orderService.save(order);
+    public R save(@RequestBody OrderAddEntity order, @RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
+        String userName = JwtUtils.getUserNameFromToken(token);
+        if (userName == null) return R.error(401,"鉴权失败");
 
-        return R.ok();
+        String orderSn = OrderSnGenerator.getInstance().GenerateOrderSn();
+
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setUserId(userId);
+        orderEntity.setUsername(userName);
+        orderEntity.setOrderSn(orderSn);
+        orderEntity.setFellowId(order.getFellowId());
+        orderEntity.setTotalAmount(order.getTotalAmount());
+        orderEntity.setPayType(order.getPayType());
+        orderEntity.setSourceType(order.getSourceType());
+        orderEntity.setStatus(order.getStatus());
+        orderEntity.setName(order.getName());
+        orderEntity.setUserPhone(order.getUserPhone());
+        orderEntity.setUserProvince(order.getUserProvince());
+        orderEntity.setUserCity(order.getUserCity());
+        orderEntity.setUserRegion(order.getUserRegion());
+        orderEntity.setUserDetailAddress(order.getUserDetailAddress());
+        orderEntity.setNote(order.getNote());
+        orderEntity.setCreateTime(new Date());
+        orderEntity.setCommentTime(null);
+        orderEntity.setFinishTime(null);
+        orderEntity.setPaymentTime(null);
+
+        if (orderService.save(orderEntity)){
+            OrderEntity justAdd = orderService.queryByOrderSn(orderSn);
+            if (justAdd != null) return R.ok().put("orderId",justAdd.getId());
+            //todo: fellow status
+        }
+
+        return R.error(500,"faild");
     }
 
     /**
@@ -77,10 +106,22 @@ public class OrderController {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("order:order:update")
-    public R update(@RequestBody OrderEntity order){
-		orderService.updateById(order);
+    public R update(@RequestBody OrderEntity order,@RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
 
-        return R.ok();
+        int OldStatus = -1;
+        OrderEntity OldOrder = orderService.getById(order.getId());
+        if(OldOrder != null){
+            OldStatus = OldOrder.getStatus();
+        }
+        if (OldOrder.getStatus() == 0 && order.getStatus() == 1){
+            order.setPaymentTime(new Date());
+        }
+		if(orderService.updateById(order)){
+            return R.ok();
+        }
+        return R.error(500,"保存失败");
     }
 
     /**
@@ -88,10 +129,46 @@ public class OrderController {
      */
     @RequestMapping("/delete")
     //@RequiresPermissions("order:order:delete")
-    public R delete(@RequestBody Long[] ids){
+    public R delete(@RequestBody Long[] ids,@RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
 		orderService.removeByIds(Arrays.asList(ids));
-
+        //todo： fellow status
         return R.ok();
     }
 
+    @RequestMapping("/finishAcc/{id}")
+    public R finishAcc(@PathVariable("id") Long id,@RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
+
+        OrderEntity order = orderService.getById(id);
+        if (userId != order.getUserId()) return R.error(401,"鉴权失败");
+
+        order.setCommentTime(new Date());
+        order.setStatus(2);
+        //todo: free fellow
+        if(orderService.updateById(order)){
+            return R.ok();
+        }
+        return R.error(500,"failed");
+    }
+
+
+    @RequestMapping("/finishOrder/{id}")
+    public R finishOrder(@PathVariable("id") Long id,@RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
+
+        OrderEntity order = orderService.getById(id);
+        if (userId != order.getUserId()) return R.error(401,"鉴权失败");
+
+        order.setFinishTime(new Date());
+        order.setStatus(3);
+
+        if(orderService.updateById(order)){
+            return R.ok();
+        }
+        return R.error(500,"failed");
+    }
 }

@@ -1,18 +1,21 @@
 package com.bhjx.accdoctor.user.entity;
 
+import lombok.Data;
+
+@Data
 public class UserAddressAddEntity {
 
-    public String name;
+    private String name;
 
-    public String phone;
+    private String phone;
 
-    public String province;
+    private String province;
 
-    public String city;
+    private String city;
 
-    public String region;
+    private String region;
 
-    public String detailAddress;
+    private String detailAddress;
 
-    public boolean defaultStatus;
+    private int defaultStatus;
 }

@@ -1,5 +1,6 @@
 package com.bhjx.accdoctor.user.service.impl;
 
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -24,6 +25,14 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public UserEntity queryByMobile(String mobile) {
+        QueryWrapper<UserEntity> userQueryWrapper = new QueryWrapper<UserEntity>();
+        userQueryWrapper.eq("mobile",mobile);
+        UserEntity user = getOne(userQueryWrapper);
+        return user;
     }
 
 }

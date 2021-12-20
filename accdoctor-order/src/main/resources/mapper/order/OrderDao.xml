@@ -6,12 +6,11 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.bhjx.accdoctor.order.entity.OrderEntity" id="orderMap">
         <result property="id" column="id"/>
-        <result property="memberId" column="member_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="fellowId" column="fellow_id"/>
         <result property="orderSn" column="order_sn"/>
-        <result property="createTime" column="create_time"/>
-        <result property="userUsername" column="user_username"/>
+        <result property="username" column="username"/>
         <result property="totalAmount" column="total_amount"/>
-        <result property="payAmount" column="pay_amount"/>
         <result property="payType" column="pay_type"/>
         <result property="sourceType" column="source_type"/>
         <result property="status" column="status"/>
@@ -22,9 +21,8 @@
         <result property="userRegion" column="user_region"/>
         <result property="userDetailAddress" column="user_detail_address"/>
         <result property="note" column="note"/>
-        <result property="deleteStatus" column="delete_status"/>
+        <result property="createTime" column="create_time"/>
         <result property="paymentTime" column="payment_time"/>
-        <result property="deliveryTime" column="delivery_time"/>
         <result property="finishTime" column="finish_time"/>
         <result property="commentTime" column="comment_time"/>
         <result property="modifyTime" column="modify_time"/>
