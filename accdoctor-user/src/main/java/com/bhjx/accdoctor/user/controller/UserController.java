@@ -99,10 +99,15 @@ public class UserController {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("user:user:update")
-    public R update(@RequestBody UserEntity user){
-		userService.updateById(user);
+    public R update(@RequestBody UserEntity user,@RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
 
-        return R.ok();
+		if(userService.updateById(user)){
+            return R.ok();
+        }
+
+        return R.error(500,"failed");
     }
 
     /**
