@@ -30,6 +30,22 @@ public class UserAddressController {
     @Autowired
     private UserAddressService userAddressService;
 
+    @RequestMapping("/set_default/{id}")
+    //@RequiresPermissions("user:useraddress:list")
+    public R setDefault(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
+
+        UserAddressEntity defaultAddress = userAddressService.queryDefault(userId);
+        defaultAddress.setDefaultStatus(0);
+        userAddressService.updateById(defaultAddress);
+        UserAddressEntity address = userAddressService.getById(id);
+        address.setDefaultStatus(1);
+        userAddressService.updateById(address);
+
+        return R.ok();
+    }
+
     @RequestMapping("/default")
     //@RequiresPermissions("user:useraddress:list")
     public R getDefault(@RequestHeader("Authorization") String token){
