@@ -1,6 +1,9 @@
 package com.bhjx.accdoctor.user.service.impl;
 
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -24,6 +27,22 @@ public class UserAttendFellowServiceImpl extends ServiceImpl<UserAttendFellowDao
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public UserAttendFellowEntity queryOne(Long fellowId, Long userId) {
+        QueryWrapper<UserAttendFellowEntity> queryWrapper = new QueryWrapper<UserAttendFellowEntity>();
+        queryWrapper.eq("user_id",userId).eq("fellow_id",fellowId);
+        if (queryWrapper.isEmptyOfWhere()) return null;
+        return getOne(queryWrapper);
+    }
+
+    @Override
+    public List<UserAttendFellowEntity> queryListByUserId(Long userId) {
+        QueryWrapper<UserAttendFellowEntity> queryWrapper = new QueryWrapper<UserAttendFellowEntity>();
+        queryWrapper.eq("user_id",userId);
+        if (queryWrapper.isEmptyOfWhere()) return Collections.emptyList();
+        return list(queryWrapper);
     }
 
 }

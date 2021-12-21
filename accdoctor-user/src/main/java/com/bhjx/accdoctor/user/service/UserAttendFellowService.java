@@ -3,7 +3,9 @@ package com.bhjx.accdoctor.user.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bhjx.common.utils.PageUtils;
 import com.bhjx.accdoctor.user.entity.UserAttendFellowEntity;
+import org.apache.catalina.User;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,9 @@ import java.util.Map;
 public interface UserAttendFellowService extends IService<UserAttendFellowEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    UserAttendFellowEntity queryOne(Long fellowId,Long userId);
+
+    List<UserAttendFellowEntity> queryListByUserId(Long userId);
 }
 
