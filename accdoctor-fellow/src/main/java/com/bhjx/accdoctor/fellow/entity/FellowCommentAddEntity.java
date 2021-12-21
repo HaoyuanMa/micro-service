@@ -14,7 +14,5 @@ public class FellowCommentAddEntity {
 
     private String content;
 
-    private String userIcon;
-
     private Integer commentType;
 }

@@ -43,7 +43,7 @@ public class UserAttendFellowServiceImpl extends ServiceImpl<UserAttendFellowDao
         queryWrapper.eq("user_id",userId);
         IPage<UserAttendFellowEntity> page = this.page(
                 new Query<UserAttendFellowEntity>().getPage(params),
-                new QueryWrapper<UserAttendFellowEntity>()
+                queryWrapper
         );
         return new PageUtils(page);
     }

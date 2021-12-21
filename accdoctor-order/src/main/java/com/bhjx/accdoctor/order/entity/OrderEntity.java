@@ -33,6 +33,10 @@ public class OrderEntity implements Serializable {
 	 * 陪诊员id
 	 */
 	private Long fellowId;
+
+	private String fellowName;
+
+	private String fellowHeader;
 	/**
 	 * 订单号
 	 */

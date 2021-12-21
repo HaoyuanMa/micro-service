@@ -38,11 +38,23 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     }
 
     @Override
-    public List<OrderEntity> queryByStatus(int status) {
+    public List<OrderEntity> queryListByStatus(Long userId, int status) {
         QueryWrapper<OrderEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("status",status);
+        queryWrapper.eq("status",status).eq("user_id",userId);
         if (queryWrapper.isEmptyOfWhere()) return Collections.emptyList();
         return list(queryWrapper);
+    }
+
+    @Override
+    public PageUtils queryPageByStatus(Long userId, int status, Map<String, Object> params) {
+        QueryWrapper<OrderEntity> queryWrapper = new QueryWrapper<OrderEntity>();
+        queryWrapper.eq("user_id",userId);
+        if (status >= 0) queryWrapper.eq("status",status);
+        IPage<OrderEntity> page = this.page(
+                new Query<OrderEntity>().getPage(params),
+                queryWrapper
+        );
+        return new PageUtils(page);
     }
 
 }

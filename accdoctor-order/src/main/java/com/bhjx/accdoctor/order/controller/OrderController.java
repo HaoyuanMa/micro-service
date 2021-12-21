@@ -36,22 +36,31 @@ public class OrderController {
         long userId = JwtUtils.getUserIdFromToken(token);
         if (userId <= 0) return R.error(401,"鉴权失败");
 
-        int unpaid = orderService.queryByStatus(0).size();
-        int paid = orderService.queryByStatus(1).size();
-        int waitToComment = orderService.queryByStatus(2).size();
-        int finished = orderService.queryByStatus(3).size();
+        int unpaid = orderService.queryListByStatus(userId,0).size();
+        int paid = orderService.queryListByStatus(userId,1).size();
+        int waitToComment = orderService.queryListByStatus(userId,2).size();
+        int finished = orderService.queryListByStatus(userId,3).size();
+        int total = unpaid + paid + waitToComment + finished;
 
-        return R.ok().put("unpaid",unpaid).put("paid",paid).put("waitToComment",waitToComment).put("finished",finished);
+        return R.ok()
+                .put("unpaid",unpaid)
+                .put("paid",paid)
+                .put("waitToComment",waitToComment)
+                .put("finished",finished)
+                .put("total",total);
 
     }
 
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @RequestMapping("/list/{status}")
     //@RequiresPermissions("order:order:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = orderService.queryPage(params);
+    public R list(@PathVariable("status") int status,@RequestHeader("Authorization") String token, @RequestParam Map<String, Object> params){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401,"鉴权失败");
+
+        PageUtils page = orderService.queryPageByStatus(userId,status,params);
 
         return R.ok().put("page", page);
     }
@@ -90,6 +99,8 @@ public class OrderController {
         orderEntity.setUsername(userName);
         orderEntity.setOrderSn(orderSn);
         orderEntity.setFellowId(order.getFellowId());
+        orderEntity.setFellowName(order.getFellowName());
+        orderEntity.setFellowHeader(order.getFellowHeader());
         orderEntity.setTotalAmount(order.getTotalAmount());
         orderEntity.setPayType(order.getPayType());
         orderEntity.setSourceType(order.getSourceType());

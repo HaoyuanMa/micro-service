@@ -1,14 +1,12 @@
 package com.bhjx.accdoctor.fellow.controller;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.bhjx.accdoctor.fellow.entity.FellowCommentAddEntity;
 import com.bhjx.accdoctor.fellow.feign.OrderFeignService;
+import com.bhjx.accdoctor.fellow.feign.UserFeignService;
 import com.bhjx.common.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +32,8 @@ public class FellowCommentController {
     private FellowCommentService fellowCommentService;
     @Autowired
     private OrderFeignService orderFeignService;
+    @Autowired
+    private UserFeignService userFeignService;
 
     @RequestMapping("/config")
     public R config(@RequestParam Map<String, Object> params){
@@ -93,17 +93,20 @@ public class FellowCommentController {
         long userId = JwtUtils.getUserIdFromToken(token);
         if (userId <= 0) return R.error(401,"鉴权失败");
 
+        R res = userFeignService.info(token);
+        LinkedHashMap user = (LinkedHashMap) res.get("user");
 
 
         FellowCommentEntity newComment = new FellowCommentEntity();
 
         newComment.setUserId(userId);
         newComment.setCreateTime(new Date());
+        newComment.setUserIcon(user.get("header").toString());
+
         newComment.setFellowId(fellowComment.getFellowId());
         newComment.setFellowName(fellowComment.getFellowName());
         newComment.setUserNickName(fellowComment.getUserNickName());
         newComment.setContent(fellowComment.getContent());
-        newComment.setUserIcon(fellowComment.getUserIcon());
         newComment.setCommentType(fellowComment.getCommentType());
 
         if(fellowCommentService.save(newComment)){

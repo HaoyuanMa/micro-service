@@ -9,6 +9,10 @@ import java.util.Date;
 public class OrderAddEntity {
     private Long fellowId;
 
+    private String fellowName;
+
+    private String fellowHeader;
+
     /**
      * 订单总额
      */

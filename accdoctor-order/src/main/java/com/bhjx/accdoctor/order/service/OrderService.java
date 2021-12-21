@@ -20,6 +20,10 @@ public interface OrderService extends IService<OrderEntity> {
 
     OrderEntity queryByOrderSn(String orderSn);
 
-    List<OrderEntity> queryByStatus(int status);
+    List<OrderEntity> queryListByStatus(Long userId, int status);
+
+    PageUtils queryPageByStatus(Long userId, int status, Map<String, Object> params);
+
+
 }
 
