@@ -37,6 +37,14 @@ public class FellowController {
     @Autowired
     private FellowCommentService fellowCommentService;
 
+    @RequestMapping("set_status/{id}/{status}")
+    public R setStatus(@PathVariable("id") Long id,@PathVariable("status") int status) {
+        FellowEntity fellow = fellowService.getById(id);
+        fellow.setStatus(status);
+        fellowService.updateById(fellow);
+
+        return R.ok();
+    }
     /**
      * 列表
      */

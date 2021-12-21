@@ -2,10 +2,12 @@ package com.bhjx.accdoctor.order.controller;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
 import com.bhjx.accdoctor.order.entity.OrderAddEntity;
+import com.bhjx.accdoctor.order.feign.FellowFeignService;
 import com.bhjx.common.utils.JwtUtils;
 import com.bhjx.common.utils.OrderSnGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ import com.bhjx.common.utils.R;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private FellowFeignService fellowFeignService;
 
     @RequestMapping("/stats")
     public R stats(@RequestHeader("Authorization") String token){
@@ -119,8 +123,12 @@ public class OrderController {
 
         if (orderService.save(orderEntity)){
             OrderEntity justAdd = orderService.queryByOrderSn(orderSn);
+            R res = fellowFeignService.info(justAdd.getFellowId());
+            LinkedHashMap fellow = (LinkedHashMap) res.get("fellow");
+            Long fellowId = Long.parseLong(fellow.get("id").toString());
+            fellowFeignService.setStatus(fellowId,1);
+
             if (justAdd != null) return R.ok().put("orderId",justAdd.getId());
-            //todo: fellow status
         }
 
         return R.error(500,"faild");
@@ -157,8 +165,14 @@ public class OrderController {
     public R delete(@RequestBody Long[] ids,@RequestHeader("Authorization") String token){
         long userId = JwtUtils.getUserIdFromToken(token);
         if (userId <= 0) return R.error(401,"鉴权失败");
-		orderService.removeByIds(Arrays.asList(ids));
-        //todo： fellow status
+
+        OrderEntity order = orderService.getById(ids[0]);
+        R res = fellowFeignService.info(order.getFellowId());
+        LinkedHashMap fellow = (LinkedHashMap) res.get("fellow");
+        Long fellowId = Long.parseLong(fellow.get("id").toString());
+        fellowFeignService.setStatus(fellowId,0);
+
+        orderService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 
@@ -174,6 +188,10 @@ public class OrderController {
         order.setStatus(2);
         //todo: free fellow
         if(orderService.updateById(order)){
+            R res = fellowFeignService.info(order.getFellowId());
+            LinkedHashMap fellow = (LinkedHashMap) res.get("fellow");
+            Long fellowId = Long.parseLong(fellow.get("id").toString());
+            fellowFeignService.setStatus(fellowId,0);
             return R.ok();
         }
         return R.error(500,"failed");

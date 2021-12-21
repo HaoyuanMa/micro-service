@@ -110,7 +110,6 @@ public class FellowCommentController {
         newComment.setCommentType(fellowComment.getCommentType());
 
         if(fellowCommentService.save(newComment)){
-            //todo: order status
             Long orderId = fellowComment.getOrderId();
             orderFeignService.finishOrder(orderId,token);
 

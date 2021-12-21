@@ -1,4 +1,4 @@
-package com.bhjx.accdoctor.user.feign;
+package com.bhjx.accdoctor.order.feign;
 
 import com.bhjx.common.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -10,5 +10,6 @@ public interface FellowFeignService {
     @RequestMapping("fellow/fellow/info/{id}")
     public R info(@PathVariable("id") Long id);
 
-
+    @RequestMapping("fellow/fellow/set_status/{id}/{status}")
+    public R setStatus(@PathVariable("id") Long id,@PathVariable("status") int status);
 }
