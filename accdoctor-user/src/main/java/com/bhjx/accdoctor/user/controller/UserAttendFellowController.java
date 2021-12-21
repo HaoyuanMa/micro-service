@@ -85,7 +85,6 @@ public class UserAttendFellowController {
         return R.ok().put("page", page);
     }
 
-
     /**
      * 信息
      */
@@ -98,36 +97,35 @@ public class UserAttendFellowController {
     }
 
     /**
-     * 保存
-     */
-    @RequestMapping("/save")
-    //@RequiresPermissions("user:userattendfellow:save")
-    public R save(@RequestBody UserAttendFellowEntity userAttendFellow){
-		userAttendFellowService.save(userAttendFellow);
-
-        return R.ok();
-    }
-
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    //@RequiresPermissions("user:userattendfellow:update")
-    public R update(@RequestBody UserAttendFellowEntity userAttendFellow){
-		userAttendFellowService.updateById(userAttendFellow);
-
-        return R.ok();
-    }
-
-    /**
      * 删除
-     */
+     * */
     @RequestMapping("/delete")
     //@RequiresPermissions("user:userattendfellow:delete")
     public R delete(@RequestBody Long[] ids){
-		userAttendFellowService.removeByIds(Arrays.asList(ids));
+        userAttendFellowService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }
 
+//    /**
+//     * 保存
+//     */
+//    @RequestMapping("/save")
+//    //@RequiresPermissions("user:userattendfellow:save")
+//    public R save(@RequestBody UserAttendFellowEntity userAttendFellow){
+//		userAttendFellowService.save(userAttendFellow);
+//
+//        return R.ok();
+//    }
+//
+//    /**
+//     * 修改
+//     */
+//    @RequestMapping("/update")
+//    //@RequiresPermissions("user:userattendfellow:update")
+//    public R update(@RequestBody UserAttendFellowEntity userAttendFellow){
+//		userAttendFellowService.updateById(userAttendFellow);
+//
+//        return R.ok();
+//    }
 }

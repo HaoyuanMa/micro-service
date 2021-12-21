@@ -16,6 +16,8 @@ public class AccdoctorCorsConfiguration {
     private String allowedOriginAdmin;
     @Value("${allowedOriginFront}")
     private String allowedOriginFront;
+    @Value("${allowedOriginFrontLocal}")
+    private String allowedOriginFrontLocal;
     @Bean
     public CorsWebFilter corsWebFilter(){
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -24,6 +26,7 @@ public class AccdoctorCorsConfiguration {
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedOrigin(allowedOriginAdmin);
         corsConfiguration.addAllowedOrigin(allowedOriginFront);
+        corsConfiguration.addAllowedOrigin(allowedOriginFrontLocal);
         corsConfiguration.setAllowCredentials(true);
         source.registerCorsConfiguration("/**",corsConfiguration);
         return new CorsWebFilter(source);

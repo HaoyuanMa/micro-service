@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.bhjx.accdoctor.user.entity.LoginEntity;
 import com.bhjx.accdoctor.user.entity.RegisterEntity;
-import com.bhjx.accdoctor.user.feign.OrderFeignService;
 import com.bhjx.common.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
@@ -33,9 +32,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    OrderFeignService orderFeignService;
-
     @RequestMapping("/login")
     public R login(@RequestBody LoginEntity loginEntity){
         String mobile = loginEntity.account;
@@ -48,19 +44,6 @@ public class UserController {
         }
         return R.error(401,"登录失败");
     }
-
-
-    /**
-     * 列表
-     */
-    @RequestMapping("/list")
-    //@RequiresPermissions("user:user:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = userService.queryPage(params);
-
-        return R.ok().put("page", page);
-    }
-
 
     /**
      * 信息
@@ -113,15 +96,26 @@ public class UserController {
         return R.error(500,"failed");
     }
 
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    //@RequiresPermissions("user:user:delete")
-    public R delete(@RequestBody Long[] ids){
-		userService.removeByIds(Arrays.asList(ids));
 
-        return R.ok();
-    }
+//    /**
+//     * 列表
+//     */
+//    @RequestMapping("/list")
+//    //@RequiresPermissions("user:user:list")
+//    public R list(@RequestParam Map<String, Object> params){
+//        PageUtils page = userService.queryPage(params);
+//
+//        return R.ok().put("page", page);
+//    }
+//
+//    /**
+//     * 删除
+//     */
+//    @RequestMapping("/delete")
+//    //@RequiresPermissions("user:user:delete")
+//    public R delete(@RequestBody Long[] ids){
+//		userService.removeByIds(Arrays.asList(ids));
+//        return R.ok();
+//    }
 
 }

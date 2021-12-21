@@ -119,26 +119,26 @@ public class FellowCommentController {
         return R.error(500,"faild");
     }
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    //@RequiresPermissions("fellow:fellowcomment:update")
-    public R update(@RequestBody FellowCommentEntity fellowComment){
-		fellowCommentService.updateById(fellowComment);
-
-        return R.ok();
-    }
-
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    //@RequiresPermissions("fellow:fellowcomment:delete")
-    public R delete(@RequestBody Long[] ids){
-		fellowCommentService.removeByIds(Arrays.asList(ids));
-
-        return R.ok();
-    }
+//    /**
+//     * 修改
+//     */
+//    @RequestMapping("/update")
+//    //@RequiresPermissions("fellow:fellowcomment:update")
+//    public R update(@RequestBody FellowCommentEntity fellowComment){
+//		fellowCommentService.updateById(fellowComment);
+//
+//        return R.ok();
+//    }
+//
+//    /**
+//     * 删除
+//     */
+//    @RequestMapping("/delete")
+//    //@RequiresPermissions("fellow:fellowcomment:delete")
+//    public R delete(@RequestBody Long[] ids){
+//		fellowCommentService.removeByIds(Arrays.asList(ids));
+//
+//        return R.ok();
+//    }
 
 }
