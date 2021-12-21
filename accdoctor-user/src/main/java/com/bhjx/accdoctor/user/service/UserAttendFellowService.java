@@ -21,6 +21,6 @@ public interface UserAttendFellowService extends IService<UserAttendFellowEntity
 
     UserAttendFellowEntity queryOne(Long fellowId,Long userId);
 
-    List<UserAttendFellowEntity> queryListByUserId(Long userId);
+    PageUtils queryByUserId(Long userId, Map<String, Object> params);
 }
 

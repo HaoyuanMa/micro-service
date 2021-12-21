@@ -76,8 +76,11 @@ public class UserAttendFellowController {
      */
     @RequestMapping("/list")
     //@RequiresPermissions("user:userattendfellow:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = userAttendFellowService.queryPage(params);
+    public R list(@RequestHeader("Authorization") String token,@RequestParam Map<String, Object> params){
+        long userId = JwtUtils.getUserIdFromToken(token);
+        if (userId <= 0) return R.error(401, "鉴权失败");
+
+        PageUtils page = userAttendFellowService.queryByUserId(userId,params);
 
         return R.ok().put("page", page);
     }

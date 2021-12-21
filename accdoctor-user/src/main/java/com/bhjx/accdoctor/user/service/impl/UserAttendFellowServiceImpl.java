@@ -38,11 +38,14 @@ public class UserAttendFellowServiceImpl extends ServiceImpl<UserAttendFellowDao
     }
 
     @Override
-    public List<UserAttendFellowEntity> queryListByUserId(Long userId) {
+    public PageUtils queryByUserId(Long userId,Map<String, Object> params) {
         QueryWrapper<UserAttendFellowEntity> queryWrapper = new QueryWrapper<UserAttendFellowEntity>();
         queryWrapper.eq("user_id",userId);
-        if (queryWrapper.isEmptyOfWhere()) return Collections.emptyList();
-        return list(queryWrapper);
+        IPage<UserAttendFellowEntity> page = this.page(
+                new Query<UserAttendFellowEntity>().getPage(params),
+                new QueryWrapper<UserAttendFellowEntity>()
+        );
+        return new PageUtils(page);
     }
 
 }
