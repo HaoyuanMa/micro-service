@@ -103,6 +103,9 @@ public class UserController {
         long userId = JwtUtils.getUserIdFromToken(token);
         if (userId <= 0) return R.error(401,"鉴权失败");
 
+        UserEntity oldUser = userService.getById(userId);
+        user.setPassword(oldUser.getPassword());
+
 		if(userService.updateById(user)){
             return R.ok();
         }
