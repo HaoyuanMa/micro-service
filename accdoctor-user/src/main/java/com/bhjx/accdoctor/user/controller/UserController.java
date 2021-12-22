@@ -72,6 +72,7 @@ public class UserController {
             newUser.setPassword(user.getPassword());
             newUser.setMobile(user.getMobile());
             newUser.setCreateTime(new Date());
+            newUser.setHeader("image");
             if(userService.save(newUser)) return R.ok();
         }
         return R.error(500,"failed");

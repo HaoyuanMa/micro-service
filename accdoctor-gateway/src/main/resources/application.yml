@@ -1,23 +1,59 @@
-server:
-  port: 88
 
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: test_route_baidu
-          uri: https://www.baidu.com
-          predicates:
-            - Query=url,baidu
+#server:
+#  port: 88
+#
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: test_route_baidu
+#          uri: https://www.baidu.com
+#          predicates:
+#            - Query=url,baidu
+#
+#        - id: test_route_qq
+#          uri: https://www.qq.com
+#          predicates:
+#            - Query=url,qq
+#
+#        - id: fellow_router
+#          uri: lb://accdoctor-fellow
+#          predicates:
+#            - Path=/api/fellow/**
+#          filters:
+#            - RewritePath=/api/(?<segment>.*),/$\{segment}
+#
+#        - id: user_router
+#          uri: lb://accdoctor-user
+#          predicates:
+#            - Path=/api/user/**
+#          filters:
+#            - RewritePath=/api/(?<segment>.*),/$\{segment}
+#
+#        - id: order_router
+#          uri: lb://accdoctor-order
+#          predicates:
+#            - Path=/api/order/**
+#          filters:
+#            - RewritePath=/api/(?<segment>.*),/$\{segment}
+#
+#        - id: admin_router
+#          uri: lb://renren-fast
+#          predicates:
+#            - Path=/api/**
+#          filters:
+#            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+#
+#  application:
+#    name: accdoctor-gateway
 
-        - id: test_route_qq
-          uri: https://www.qq.com
-          predicates:
-            - Query=url,qq
-
-        - id: admin_router
-          uri: lb://renren-fast
-          predicates:
-            - Path=/api/**
-  application:
-    name: accdoctor-gateway
+#spring:
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 192.168.52.128:8848
+#      config:
+#        server-addr: 192.168.52.128:8848
+#        namespace: 83aa1be3-5287-4009-88c8-2cff8a83faaa
+#  application:
+#    name: accdoctor-gateway

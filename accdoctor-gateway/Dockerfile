@@ -1,5 +1,5 @@
 FROM java:8
-VOLUME /accdoctor-admin
+VOLUME /accdoctor-gateway
 COPY target/*.jar /app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
-EXPOSE 6000
+EXPOSE 88

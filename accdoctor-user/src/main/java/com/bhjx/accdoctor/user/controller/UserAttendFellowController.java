@@ -53,7 +53,7 @@ public class UserAttendFellowController {
             LinkedHashMap fellow = (LinkedHashMap) res.get("fellow");
             String fellowName = fellow.get("username").toString();
             Object fellowHeader = fellow.get("header");
-            fellowHeader = fellowHeader==null ? "" : fellowHeader.toString();
+            fellowHeader = fellowHeader==null ? " " : fellowHeader.toString();
             newAttend.setFellowId(fellowId);
             newAttend.setUserId(userId);
             newAttend.setFellowName(fellowName);
